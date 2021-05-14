@@ -2,16 +2,20 @@ version: '3.7'
 
 services:
   djangorless:
+    container_name: djangorless
+    image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
     build:
       context: .
-    container_name: djangorless
+      cache_from:
+        - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless      
     volumes:
       - ./:/app
-    working_dir: /app
-    command: python manage.py runserver 0:8000
+    # working_dir: /app
+    # command: python manage.py runserver 0:8000
     ports:
       - 8000:8000
     environment:
       SECRET_KEY: ${SECRET_KEY}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}

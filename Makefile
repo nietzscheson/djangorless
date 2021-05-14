@@ -1,21 +1,28 @@
 .PHONY: init
 
-init: down up ps migrate
+init:
+	make down
+	make up
+	make ps
 down:
 	docker-compose down --volumes --remove-orphans
 pull:
 	docker-compose pull
 build:
+	make pull
 	docker-compose build
-up: pull build
+up:
+	make build
 	docker-compose up -d
 ps:
 	docker-compose ps
 migrations:
 	docker-compose run --rm djangorless python manage.py makemigrations
-migrate: migrations
+migrate:
+	make migrations
 	docker-compose run --rm djangorless python manage.py migrate
-# fixtures: migrate
+fixtures: 
+	make migrate
 su:
 	docker-compose run --rm djangorless python manage.py createsuperuser
 test:
@@ -26,7 +33,8 @@ format:
 	docker-compose run --rm djangorless black .
 setup:
 	docker-compose run --rm djangorless pre-commit install
-prune: down
+prune: 
+	make down
 	docker volume prune -f
 	docker system prune -f
 populatedb:

@@ -1,31 +1,33 @@
 service: djangorless
 
-plugins:
-  - serverless-python-requirements
-  - serverless-wsgi
-
-custom:
-  wsgi:
-    app: core.wsgi.application
-    packRequirements: false
-  pythonRequirements:
-    dockerizePip: non-linux
-
 provider:
   name: aws
   runtime: python3.8
   stage: dev
   region: us-east-1
+  apiGateway:
+    shouldStartNameWithService: true
   iamRoleStatements:
     - Effect: "Allow"
       Action:
        - s3:GetObject
        - s3:PutObject
       Resource: "arn:aws:s3:::*"
+  vpc:
+    securityGroupIds:
+      - sg-bfc69fbd
+    subnetsIds:
+      - subnet-e0af9aee
+      - subnet-d56019f4
+      - subnet-cfaedda9
+      - subnet-cc186793
+      - subnet-9acb4dab
+      - subnet-778e8d3a
+
 
 functions:
   app:
-    handler: wsgi_handler.handler
+    image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless:latest
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
@@ -33,3 +35,17 @@ functions:
           rate: rate(5 minutes)
           input:
               warmer: true
+
+
+resources:
+    Resources:
+        Assets:
+            Type: AWS::S3::Bucket
+            Properties:
+                BucketName: djangorless
+                CorsConfiguration:
+                    CorsRules:
+                        -   AllowedHeaders: ["*"]
+                            AllowedMethods: [GET]
+                            AllowedOrigins: ["*"]
+
