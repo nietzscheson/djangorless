@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import logging
+import os
+from logging import getLogger
+from sys import stdout
 
 from pathlib import Path
 
@@ -25,8 +29,7 @@ SECRET_KEY = 'django-insecure-h)6dv(!!x8+f(flqelk-tx4#k57(rjw)ploz^b*_sp$xx^zl9%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.execute-api.us-east-1.amazonaws.com']
-
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.execute-api.us-east-1.amazonaws.com']
 
 # Application definition
 
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -73,12 +77,34 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': "postgres",
+        'HOST': "djangorless.cki8gulpeeob.us-east-1.rds.amazonaws.com",
+        'PASSWORD': "postgres",
+        'PORT': '5432',
     }
 }
+
+
+# SQLITE_BUCKET = os.environ.get('SQLITE_BUCKET', "djangorless")
+# 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'zappa_django_utils.db.backends.s3sqlite',
+#         'NAME': 'sqlite.db',
+#         'BUCKET': SQLITE_BUCKET
+#     }
+# }
 
 
 # Password validation
@@ -99,6 +125,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
