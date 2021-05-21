@@ -7,15 +7,23 @@ services:
     build:
       context: .
       cache_from:
-        - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless      
+        - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless 
     volumes:
       - ./:/app
-    # working_dir: /app
-    # command: python manage.py runserver 0:8000
     ports:
       - 8000:8000
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:13.2-alpine
+    container_name: postgres
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
     environment:
-      SECRET_KEY: ${SECRET_KEY}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  pgdata:
