@@ -1,11 +1,21 @@
-FROM public.ecr.aws/lambda/python:3.8
+FROM python:3.8
 
-RUN yum install -y python-pip python-devel postgresql-server postgresql-devel postgresql-contrib gcc
+ENV PYTHONUNBUFFERED 1
+
+RUN pip3 install --no-cache-dir --upgrade pip
+
+WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install awslambdaric
+
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["app.handler"]
+RUN chmod 755 entrypoint.sh
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+
+CMD [ "handler.handler" ]

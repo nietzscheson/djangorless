@@ -20,6 +20,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+env = os.environ
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -39,8 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'storages'
+    'django.contrib.staticfiles'
 ]
 
 MIDDLEWARE = [
@@ -85,27 +86,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': "postgres",
-        'HOST': "djangorless.cki8gulpeeob.us-east-1.rds.amazonaws.com",
-        'PASSWORD': "postgres",
-        'PORT': '5432',
+    "default": {
+        "ENGINE": env.get("DATABASE_ENGINE", "django.db.backends.postgresql"),
+        "NAME": env.get("DATABASE_NAME", "postgres"),
+        "USER": env.get("DATABASE_USER", "postgres"),
+        "PASSWORD": env.get("DATABASE_PASS", "postgres"),
+        "HOST": env.get("DATABASE_HOST", "djangorless.cki8gulpeeob.us-east-1.rds.amazonaws.com"),
+        "PORT": env.get("DATABASE_PORT", 5432),
     }
 }
-
-
-# SQLITE_BUCKET = os.environ.get('SQLITE_BUCKET', "djangorless")
-# 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'zappa_django_utils.db.backends.s3sqlite',
-#         'NAME': 'sqlite.db',
-#         'BUCKET': SQLITE_BUCKET
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
