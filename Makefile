@@ -41,3 +41,5 @@ populatedb:
 	docker-compose exec djangorless python manage.py populatedb
 sls.deploy:
 	docker-compose exec djangorless sls deploy
+collecstatic:
+	docker-compose exec djangorless python manage.py collectstatic --noinput

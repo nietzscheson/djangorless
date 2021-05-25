@@ -2,3 +2,5 @@ Django==3.2.3
 psycopg2==2.8.6
 serverless-wsgi==1.7.7
 werkzeug==1.0.1
+django-storages==1.11.1
+boto3==1.17.79
