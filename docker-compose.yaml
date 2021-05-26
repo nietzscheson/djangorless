@@ -4,6 +4,7 @@ services:
   djangorless:
     container_name: djangorless
     image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
+    command: python manage.py runserver 0:8000
     build:
       context: .
       cache_from:

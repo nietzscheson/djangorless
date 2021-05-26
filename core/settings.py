@@ -91,7 +91,7 @@ DATABASES = {
         "NAME": env.get("DATABASE_NAME", "postgres"),
         "USER": env.get("DATABASE_USER", "postgres"),
         "PASSWORD": env.get("DATABASE_PASS", "postgres"),
-        "HOST": env.get("DATABASE_HOST", "djangorless.cki8gulpeeob.us-east-1.rds.amazonaws.com"),
+        "HOST": env.get("DATABASE_HOST", "postgres"),
         "PORT": env.get("DATABASE_PORT", 5432),
     }
 }

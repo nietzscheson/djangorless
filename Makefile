@@ -4,6 +4,7 @@ init:
 	make down
 	make up
 	make ps
+	make migrate
 down:
 	docker-compose down --volumes --remove-orphans
 pull:
@@ -29,17 +30,11 @@ test:
 	docker-compose exec djangorless python manage.py test
 shell:
 	docker-compose exec djangorless python manage.py shell
-format:
-	docker-compose exec djangorless black .
-setup:
-	docker-compose exec djangorless pre-commit install
 prune: 
 	make down
 	docker volume prune -f
 	docker system prune -f
 populatedb:
 	docker-compose exec djangorless python manage.py populatedb
-sls.deploy:
-	docker-compose exec djangorless sls deploy
 collecstatic:
 	docker-compose exec djangorless python manage.py collectstatic --noinput
