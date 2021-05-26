@@ -29,7 +29,5 @@ jobs:
                 IMAGE_TAG: ${{ github.sha }}
                 COMPOSE_INTERACTIVE_NO_CLI: 1
               run: make
-            - name: Run Lint
-              run: make lint
             - name: Run Tests
               run: make test
