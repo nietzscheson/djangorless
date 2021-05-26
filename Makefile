@@ -18,23 +18,23 @@ up:
 ps:
 	docker-compose ps
 migrations:
-	docker-compose exec djangorless python manage.py makemigrations
+	docker-compose run --rm djangorless python manage.py makemigrations
 migrate:
 	make migrations
-	docker-compose exec djangorless python manage.py migrate
+	docker-compose run --rm djangorless python manage.py migrate
 fixtures: 
 	make migrate
 su:
-	docker-compose exec djangorless python manage.py createsuperuser
+	docker-compose run --rm djangorless python manage.py createsuperuser
 test:
-	docker-compose exec djangorless python manage.py test
+	docker-compose run --rm djangorless python manage.py test
 shell:
-	docker-compose exec djangorless python manage.py shell
+	docker-compose run --rm djangorless python manage.py shell
 prune: 
 	make down
 	docker volume prune -f
 	docker system prune -f
 populatedb:
-	docker-compose exec djangorless python manage.py populatedb
+	docker-compose run --rm djangorless python manage.py populatedb
 collecstatic:
-	docker-compose exec djangorless python manage.py collectstatic --noinput
+	docker-compose run --rm djangorless python manage.py collectstatic --noinput
