@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  djangorless:
+    command: python manage.py runserver 0:8000
+    ports:
+      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:13.2-alpine
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+        - 5432:5432
+    environment:
+        POSTGRES_PASSWORD: ${DATABASE_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
