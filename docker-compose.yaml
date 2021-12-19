@@ -1,11 +1,12 @@
 version: '3.7'
 
 services:
-  djangorless:
-    container_name: djangorless
+  djangorless-default: &djangorless-default
+    # container_name: djangorless
     # image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
     build:
       context: ./core
+      target: base
       # cache_from:
       #   - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
       args:
@@ -20,3 +21,6 @@ services:
         DATABASE_PORT: ${DATABASE_PORT}
     volumes:
       - ./core:/app
+  app:
+    <<: *djangorless-default
+    container_name: app
