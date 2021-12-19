@@ -1,4 +1,4 @@
-Django==3.2.3
+Django==3.2.7
 psycopg2==2.8.6
 serverless-wsgi==1.7.7
 werkzeug==1.0.1
