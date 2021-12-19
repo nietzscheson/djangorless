@@ -9,7 +9,7 @@ services:
       context: .
       cache_from:
         - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
-      args: 
+      args:
         AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
         AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
         AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
@@ -20,7 +20,7 @@ services:
       - 8000:8000
     depends_on:
       - postgres
-      
+
   postgres:
     image: postgres:13.2-alpine
     container_name: postgres
