@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from settings import env
+from core.settings import USE_ADMIN
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
+urlpatterns = []
+
+if USE_ADMIN:
+    urlpatterns.extend(
+        [
+            path("admin/", admin.site.urls),
+        ]
+    )

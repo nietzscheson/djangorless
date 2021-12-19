@@ -33,6 +33,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.execute-api.us-east-1.amazonaws.com']
 
+# Enabled Admin Dashboard
+USE_ADMIN = env.get("USE_ADMIN", "False") == "True"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles'
 ]
+
+# if USE_ADMIN is True:
+#     INSTALLED_APPS.append("django.contrib.admin")
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -149,7 +155,7 @@ USE_TZ = True
 
 # USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
-if env.get("USER_S3", "TRUE"):
+if env.get("USE_S3", "TRUE"):
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
