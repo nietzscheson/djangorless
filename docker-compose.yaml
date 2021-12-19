@@ -6,7 +6,7 @@ services:
     # image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
     command: python manage.py runserver 0:8000
     build:
-      context: .
+      context: ./core
       # cache_from:
       #   - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
       args:
@@ -15,7 +15,7 @@ services:
         AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
         USE_S3: ${USE_S3}
     volumes:
-      - ./:/app
+      - ./core:/app
     ports:
       - 8000:8000
     depends_on:
