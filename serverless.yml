@@ -1,10 +1,12 @@
 service: djangorless
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: python3.8
   stage: dev
-  region: us-east-1
+#  region: us-east-1
   apiGateway:
     shouldStartNameWithService: true
   iamRoleStatements:
@@ -13,21 +15,28 @@ provider:
        - s3:GetObject
        - s3:PutObject
       Resource: "arn:aws:s3:::*"
-  vpc:
-    securityGroupIds:
-      - sg-bfc69fbd
-    subnetsIds:
-      - subnet-e0af9aee
-      - subnet-d56019f4
-      - subnet-cfaedda9
-      - subnet-cc186793
-      - subnet-9acb4dab
-      - subnet-778e8d3a
+
+#  ecr:
+#    images:
+#      core:
+#        path: ./core
+#        target: base
+
+#  vpc:
+#    securityGroupIds:
+#      - sg-bfc69fbd
+#    subnetsIds:
+#      - subnet-e0af9aee
+#      - subnet-d56019f4
+#      - subnet-cfaedda9
+#      - subnet-cc186793
+#      - subnet-9acb4dab
+#      - subnet-778e8d3a
 
 
 functions:
   app:
-    image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless:latest
+    image: 299264538740.dkr.ecr.us-west-1.amazonaws.com/djangorless:latest
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
@@ -58,5 +67,6 @@ resources:
                             Principal: '*' # everyone
                             Action: 's3:GetObject' # to read
                             Resource: 'arn:aws:s3:::djangorless/*' # things in the bucket
+
 
 

@@ -1,12 +1,18 @@
-FROM python:3.8 as base
+FROM python:3.9
 
 RUN pip3 install --no-cache-dir --upgrade pip
 
 WORKDIR /app
 
-COPY requirements.txt .
+RUN pip install awscli --upgrade --user --no-warn-script-location
 
-RUN pip install awslambdaric
+RUN apt update && apt install nodejs npm -y
+
+RUN npm install -g serverless
+
+RUN cp /root/.local/bin/aws /usr/bin/aws && chmod -R a+w /usr/bin/aws
+
+COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
@@ -39,7 +45,7 @@ ENV DATABASE_PASS=$DATABASE_PASS
 ENV DATABASE_HOST=$DATABASE_HOST
 ENV DATABASE_PORT=$DATABASE_PORT
 
-COPY . .
+COPY . ./
 
 RUN chmod 755 entrypoint.sh
 

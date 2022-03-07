@@ -3,15 +3,15 @@ version: '3.7'
 services:
   core: &core
     container_name: core
-    # image: 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
+    image: 299264538740.dkr.ecr.us-west-1.amazonaws.com/djangorless:latest
     build:
       context: ./core
-      target: base
-      # cache_from:
-      #   - 299264538740.dkr.ecr.us-east-1.amazonaws.com/djangorless
+      # target: base
+#      cache_from:
+#        - 299264538740.dkr.ecr.us-west-1.amazonaws.com/djangorless:2
       args:
         ### Django
-        USE_ADMIN: "False"
+        USE_ADMIN: "True"
         ### AWS
         AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
         AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
@@ -25,11 +25,12 @@ services:
         DATABASE_PORT: ${DATABASE_PORT}
     volumes:
       - ./core:/app
-  admin:
-    <<: *core
-    container_name: admin
-    build:
-      context: ./core
-      args:
-        ### Django
-        USE_ADMIN: "True"
+#  admin:
+#    <<: *core
+#    container_name: admin
+#    build:
+#      context: ./core
+#      args:
+#        ### Django
+#        USE_ADMIN: "True"
+#

@@ -38,3 +38,8 @@ populatedb:
 	docker-compose run --rm core python manage.py populatedb
 collecstatic:
 	docker-compose run --rm core python manage.py collectstatic --noinput
+sls.deploy:
+	docker-compose run --rm core serverless deploy
+remove_files:
+	rm -rf core/media/*
+	rm -rf core/static/*

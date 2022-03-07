@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-h)6dv(!!x8+f(flqelk-tx4#k57(rjw)ploz^b*_sp$xx^zl9%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.execute-api.us-east-1.amazonaws.com']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.execute-api.us-west-1.amazonaws.com']
 
 # Enabled Admin Dashboard
 USE_ADMIN = env.get("USE_ADMIN", "False") == "True"
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'storages',
 ]
 
 # if USE_ADMIN is True:
@@ -84,12 +85,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 DATABASES = {
     "default": {
@@ -157,8 +158,8 @@ USE_TZ = True
 
 if env.get("USE_S3", "TRUE"):
     # aws settings
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    # AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    # AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
     AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
@@ -166,15 +167,18 @@ if env.get("USE_S3", "TRUE"):
     # s3 static settings
     AWS_LOCATION = 'static'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = "core.storage.StaticStorage"
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = "media"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+    DEFAULT_FILE_STORAGE = "core.storage.PublicMediaStorage"
 else:
-    STATIC_URL = '/staticfiles/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = "/staticfiles/"
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-
-MEDIA_URL = '/mediafiles/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -8,13 +8,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-  admin:
-    command: python manage.py runserver 0:8000
-    ports:
-      - 8001:8000
-    depends_on:
-      postgres:
-        condition: service_healthy
+#  admin:
+#    command: python manage.py runserver 0:8000
+#    ports:
+#      - 8001:8000
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
 
   postgres:
     image: postgres:13.2-alpine
@@ -29,3 +29,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
