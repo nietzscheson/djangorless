@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head class="h-100">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>{% block title %}DjangorLess{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    body {
+      background-image: #fff;
+    }
+
+    .container {
+      max-width: 960px;
+    }
+
+    .pricing-header {
+      max-width: 700px;
+    }
+  </style>
+</head>
+<body class='d-flex flex-column min-vh-100'>
+  <div class="container py-3">
+    {% block content %}{% endblock %}
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+
+      <div class="row">
+        <div class="col-12 col-md">
+          <small class="d-block text-muted align-center"></small>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <span class="text-muted">&copy; 2022 | Cristian Angulo @nietzscheson</span>
+    </div>
+  </footer>
+</body>
+</html>

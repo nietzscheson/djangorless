@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  core:
+    stdin_open: true
+    tty: true
+    # image: ${DJANGORLESS_CONTAINER_REPOSITORY_NAME}
+    build:
+      context: ./core
+      args:
+        ### AWS ###
+        AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+        AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+        USE_S3: ${USE_S3}
+    container_name: core
+    ports:
+      - 8000:8000
+    volumes:
+      - ./core:/home/core
+    command: python manage.py runserver 0:8000
+

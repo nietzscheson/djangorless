@@ -1,0 +1,9 @@
+Django==4.1.1
+django-s3-sqlite==0.0.5
+boto3==1.24.66
+factory-boy==3.2.1
+awslambdaric==2.0.4
+serverless-wsgi==3.0.1
+werkzeug==2.2.2
+django-storages==1.13.1
+django-bootstrap-v5==1.0.11
