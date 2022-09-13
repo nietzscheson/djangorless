@@ -4,7 +4,7 @@ services:
   core:
     stdin_open: true
     tty: true
-    # image: ${DJANGORLESS_CONTAINER_REPOSITORY_NAME}
+    image: ${DJANGORLESS_CONTAINER_REPOSITORY_NAME}
     build:
       context: ./core
       args:
