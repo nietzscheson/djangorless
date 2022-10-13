@@ -1,9 +1,9 @@
-.PHONY: init 
+.PHONY: init
 
-init: 
-	make down 
-	make up 
-	make ps 
+init:
+	make down
+	make up
+	make ps
 	make fixtures
 down:
 	docker-compose down --volumes --remove-orphans
@@ -11,19 +11,20 @@ pull:
 	docker-compose pull
 build:
 	docker-compose build
-up: 
-	make pull 
+up:
+	make pull
 	make build
 	docker-compose up -d
 ps:
 	docker-compose ps
 migrations:
 	docker-compose run --rm core python manage.py makemigrations
-migrate: 
+migrate:
 	make migrations
 	docker-compose run --rm core python manage.py migrate
-fixtures: 
+fixtures:
 	make migrate
+	docker-compose run --rm core python manage.py populatedb
 su:
 	docker-compose run --rm core python manage.py createsuperuser
 test:
@@ -41,3 +42,5 @@ collecstatic:
 	docker-compose run --rm core python manage.py collectstatic --noinput
 shell:
 	docker-compose exec core python manage.py shell
+reset_db:
+	docker-compose run --rm core python manage.py reset_db --noinput --close-sessions

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'common.apps.CommonConfig',
     'django_s3_sqlite',
-    'bootstrap5'
+    'bootstrap5',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -78,20 +79,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-    "default": {
-        "ENGINE": "django_s3_sqlite",
-        "NAME": "sqlite.db",
-        "BUCKET": env.get("AWS_STORAGE_BUCKET_NAME"),
-    	"AWS_S3_ACCESS_KEY": env.get("AWS_S3_ACCESS_KEY"),  # optional, to lock down your S3 bucket to an IAM user
-    	"AWS_S3_ACCESS_SECRET": env.get("AWS_S3_ACCESS_SECRET"),  # optional, to lock down your S3 bucket to an IAM user
+USE_S3 = env.get("USER_S3", False)
+
+DB_SQLITE = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+if USE_S3:
+
+    DB_SQLITE = {
+        "default": {
+            "ENGINE": "django_s3_sqlite",
+            "NAME": "sqlite.db",
+            "BUCKET": env.get("AWS_STORAGE_BUCKET_NAME"),
+        	"AWS_S3_ACCESS_KEY": env.get("AWS_S3_ACCESS_KEY"),  # optional, to lock down your S3 bucket to an IAM user
+        	"AWS_S3_ACCESS_SECRET": env.get("AWS_S3_ACCESS_SECRET"),  # optional, to lock down your S3 bucket to an IAM user
+        }
+    }
+
+
+DATABASES = DB_SQLITE
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -127,7 +137,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-if env.get("USER_S3", "TRUE"):
+if USE_S3:
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
