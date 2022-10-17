@@ -2,19 +2,14 @@
 
 init:
 	make down
+	make reset_db
 	make up
 	make ps
 	make fixtures
 down:
 	docker-compose down --volumes --remove-orphans
-pull:
-	docker-compose pull
-build:
-	docker-compose build
 up:
-	make pull
-	make build
-	docker-compose up -d
+	docker-compose up --build -d
 ps:
 	docker-compose ps
 migrations:
