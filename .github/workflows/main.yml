@@ -32,10 +32,10 @@ jobs:
             - name: Build image from Amazon ECR
               env:
                 ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                ECR_REPOSITORY: evapacks
+                ECR_REPOSITORY: djangorless
                 IMAGE_TAG: ${{ github.sha }}
                 COMPOSE_INTERACTIVE_NO_CLI: 1
-              run: make
+              run: make up
             - name: Run Tests
               run: make test
             - name: Push container
