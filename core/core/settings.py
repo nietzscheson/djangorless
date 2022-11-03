@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'common.apps.CommonConfig',
+    'apps.common',
     'django_s3_sqlite',
     'bootstrap5',
-    'django_extensions'
+    'django_extensions',
+    'apps.user'
 ]
 
 MIDDLEWARE = [
@@ -80,6 +82,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 USE_S3 = env.get("USER_S3", False)
+
+# DB_SQLITE = {
+#     'default': dj_database_url.config(default="sqlite://:memory:")
+# }
 
 DB_SQLITE = {
     'default': {
@@ -165,3 +171,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
+
+AUTH_USER_MODEL = 'user.User'
