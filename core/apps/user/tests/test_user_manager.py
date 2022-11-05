@@ -8,7 +8,6 @@ def test_create_user():
     Method to show how create a User with the Manager
     """
     userFactory = UserFactory.build()
-    print(userFactory.email)
 
     User = get_user_model()
     user = User.objects.create_user(

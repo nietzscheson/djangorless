@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
-import dj_database_url
+import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -173,3 +173,79 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 AUTH_USER_MODEL = 'user.User'
+
+COGNITO_USER_POOL_ID = env.get("COGNITO_USER_POOL_ID")
+COGNITO_CLIENT_ID = env.get("COGNITO_CLIENT_ID")
+COGNITO_CLIENT_SECRET = env.get("COGNITO_CLIENT_SECRET")
+
+AUTHENTICATION_BACKENDS = ["core.backends.CognitoBackend"]
+
+# Django Login Options
+# See https://docs.djangoproject.com/en/3.2/topics/logging/
+###############
+# For this to work properly, in development environment the variables values must be:
+# USE_CLOUDWATCH=False
+# DEBUG=True
+
+# the basic logger other apps can import
+logger = logging.getLogger(__name__)
+
+# the minimum reported level
+LOGGING_LEVEL = os.getenv("LOGGING_LEVEL") or "INFO"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "root": {
+        "level": LOGGING_LEVEL,
+        "handlers": ["console"],
+    },
+    "formatters": {
+        "formatter": {
+            "format": "%(asctime)s [%(levelname)-8s] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": LOGGING_LEVEL,
+            "class": "logging.StreamHandler",
+            "formatter": "formatter",
+        },
+        "sql": {
+            "class": "logging.StreamHandler",
+            "formatter": "formatter",
+        },
+    },
+    "loggers": {
+        "django.db.backends": {
+            "level": LOGGING_LEVEL,
+            "handlers": ["sql"],
+        }
+    },
+}
+
+USE_CLOUDWATCH = os.getenv("USE_CLOUDWATCH", "False") == "True"
+
+if USE_CLOUDWATCH:
+    AWS_LOG_GROUP = env["AWS_LOG_GROUP"]
+    AWS_LOG_STREAM = env["AWS_LOG_STREAM"]
+    AWS_LOGGER_NAME = env["AWS_LOGGER_NAME"]
+
+    LOGGING["root"]["handlers"] = [AWS_LOGGER_NAME]
+    LOGGING["formatters"] = {
+        "aws": {
+            "format": "%(asctime)s [%(levelname)-8s] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    }
+    LOGGING["handlers"] = {
+        AWS_LOGGER_NAME: {
+            "level": LOGGING_LEVEL,
+            "class": "watchtower.django.DjangoCloudWatchLogHandler",
+            "log_group": AWS_LOG_GROUP,
+            "stream_name": AWS_LOG_STREAM,
+            "formatter": "aws",
+            "use_queues": False,
+        },
+    }
