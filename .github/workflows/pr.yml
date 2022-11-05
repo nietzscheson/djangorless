@@ -9,13 +9,23 @@ jobs:
           matrix:
             node-version: [14.x]
         env:
+            ### AWS ###
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_STORAGE_BUCKET_NAME: ${{ secrets.AWS_STORAGE_BUCKET_NAME }}
             USE_S3: True
             DJANGORLESS_CONTAINER_REPOSITORY_NAME: ${{ secrets.DJANGORLESS_CONTAINER_REPOSITORY_NAME }}
             SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+            ### Cognito ###
+            COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+            COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+            COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
+        services:
+            redis:
+                image: selenium/standalone-chrome-debug:3.7.1
+                ports:
+                - 4444:4444
         steps:
             - uses: actions/checkout@v2
-            - name: Run Tests
-              run: make test
+            - name: Build, Run & Test Application
+              run: printenv # make test
