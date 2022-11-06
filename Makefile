@@ -24,7 +24,8 @@ fixtures:
 su:
 	docker-compose run --rm core python manage.py createsuperuser
 test:
-	docker-compose run --rm core pytest --driver Remote --selenium-host selenium --selenium-port 4444 --capability browserName chrome --cache-clear --disable-warnings -s -n auto
+	# docker-compose run --rm core pytest --driver Remote --selenium-host selenium --selenium-port 4444 --capability browserName chrome --cache-clear --disable-warnings -s -n auto
+	docker-compose run --rm core pytest
 debug:
 	docker-compose -f docker-compose.yaml -f docker-compose.debug.yaml up --build -d
 remove_files:
@@ -42,5 +43,3 @@ reset_db:
 	docker-compose run --rm core python manage.py reset_db --noinput --close-sessions
 populatedb:
 	docker-compose run --rm core python manage.py populatedb
-selenium:
-	docker-compose -f selenium.yaml up --build -d
