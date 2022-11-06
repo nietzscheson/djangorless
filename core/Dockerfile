@@ -22,14 +22,6 @@ ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
 ENV COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
 ENV COGNITO_CLIENT_SECRET=$COGNITO_CLIENT_SECRET
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  gcc \
-  g++ \
-  make \
-  cmake \
-  unzip \
-  libcurl4-openssl-dev
-
 COPY requirements.txt  .
 RUN  pip3 install -r requirements.txt
 
