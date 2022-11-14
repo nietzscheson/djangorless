@@ -9,12 +9,14 @@ provider:
   region: us-east-1
   apiGateway:
     shouldStartNameWithService: true
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-       - s3:GetObject
-       - s3:PutObject
-      Resource: "arn:aws:s3:::*"
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+          - s3:GetObject
+          - s3:PutObject
+          Resource: "arn:aws:s3:::*"
 
 
 functions:
@@ -29,24 +31,26 @@ functions:
               warmer: true
 
 
-resources:
-    Resources:
-        Assets:
-            Type: AWS::S3::Bucket
-            Properties:
-                BucketName: djangorless
-                CorsConfiguration:
-                    CorsRules:
-                        -   AllowedHeaders: ["*"]
-                            AllowedMethods: [GET]
-                            AllowedOrigins: ["*"]
-        AssetsBucketPolicy:
-            Type: AWS::S3::BucketPolicy
-            Properties:
-                Bucket: !Ref Assets # References the bucket we defined above
-                PolicyDocument:
-                    Statement:
-                        -   Effect: Allow
-                            Principal: '*' # everyone
-                            Action: 's3:GetObject' # to read
-                            Resource: 'arn:aws:s3:::djangorless/*' # things in the bucket
+# resources:
+#     Resources:
+#         Assets:
+#             Type: AWS::S3::Bucket
+#             Properties:
+#                 BucketName: djangorless
+#                 CorsConfiguration:
+#                     CorsRules:
+#                         -   AllowedHeaders: ["*"]
+#                             AllowedMethods: [GET]
+#                             AllowedOrigins: ["*"]
+#         AssetsBucketPolicy:
+#             Type: AWS::S3::BucketPolicy
+#             Properties:
+#                 Bucket: !Ref Assets # References the bucket we defined above
+#                 PolicyDocument:
+#                     Statement:
+#                         -   Effect: Allow
+#                             Principal: '*' # everyone
+#                             Action: 's3:GetObject' # to read
+#                             Resource: 'arn:aws:s3:::djangorless/*' # things in the bucket
+#
+#
