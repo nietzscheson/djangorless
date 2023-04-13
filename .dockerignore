@@ -1,0 +1,7 @@
+terraform
+node_modules
+.serverless
+__pycache__
+.env*
+.local
+.cache

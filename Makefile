@@ -2,7 +2,7 @@
 
 init:
 	make down
-	make reset_db
+	# make reset_db
 	make up
 	make ps
 	make fixtures
@@ -19,7 +19,7 @@ migrate:
 	docker-compose run --rm core python manage.py migrate
 fixtures:
 	make migrate
-	make populatedb
+	# make populatedb
 	# docker-compose run --rm core sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py populatedb"
 su:
 	docker-compose run --rm core python manage.py createsuperuser
@@ -43,3 +43,17 @@ reset_db:
 	docker-compose run --rm core python manage.py reset_db --noinput --close-sessions
 populatedb:
 	docker-compose run --rm core python manage.py populatedb
+terraform.fmt:
+	terraform -chdir=terraform fmt -check
+terraform.diff:
+	terraform -chdir=terraform fmt -diff
+terraform.init:
+	terraform -chdir=terraform init
+terraform.validate: terraform.init
+	terraform -chdir=terraform validate
+terraform.dev.plan:
+	terraform -chdir=terraform plan -var-file dev.tfvars
+terraform.dev.apply:
+	terraform -chdir=terraform apply -var-file dev.tfvars -auto-approve
+terraform.dev.destroy:
+	terraform -chdir=terraform destroy -var-file dev.tfvars -auto-approve

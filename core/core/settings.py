@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-0*+o%s!d1re0uennz_vg7z2*-wtm37m8zf&h33q45ca^g9ei(g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.execute-api.us-east-1.amazonaws.com', '.execute-api.us-east-2.amazonaws.com']
 
 
 # Application definition
@@ -82,33 +82,31 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-USE_S3 = env.get("USER_S3", False)
+USE_S3 = env.get("USE_S3", False)
 
 # DB_SQLITE = {
 #     'default': dj_database_url.config(default="sqlite://:memory:")
 # }
 
-DB_SQLITE = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DJANGO_EXTENSIONS_RESET_DB_SQLITE_ENGINES = ['django.db.backends.sqlite3', 'django_s3_sqlite']
 
-if USE_S3:
-
-    DB_SQLITE = {
+if USE_S3 == True:
+    DATABASES = {
         "default": {
             "ENGINE": "django_s3_sqlite",
             "NAME": "sqlite.db",
-            "BUCKET": env.get("AWS_STORAGE_BUCKET_NAME"),
-        	"AWS_S3_ACCESS_KEY": env.get("AWS_S3_ACCESS_KEY"),  # optional, to lock down your S3 bucket to an IAM user
-        	"AWS_S3_ACCESS_SECRET": env.get("AWS_S3_ACCESS_SECRET"),  # optional, to lock down your S3 bucket to an IAM user
+            "BUCKET": env.get("AWS_STORAGE_BUCKET_NAME", None),
+            "AWS_S3_ACCESS_KEY": env.get("AWS_ACCESS_KEY_ID", None),
+            "AWS_S3_ACCESS_SECRET": env.get("AWS_SECRET_ACCESS_KEY", None),
         }
     }
-
-
-DATABASES = DB_SQLITE
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
